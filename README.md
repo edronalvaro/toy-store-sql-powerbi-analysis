@@ -1,102 +1,174 @@
-# Toy Store Sales & Inventory Analysis (SQL Project)
+# Retail Performance & Inventory Optimization Analysis
+
+**Tools Used:** SQL (MySQL), Power BI  
+**Dataset Size:** 800K+ Records
 
 ---
 
-## Executive Summary
-This project analyzes sales performance, profitability, and inventory efficiency for a multi-store toy retailer using SQL.
+## Project Overview
 
-The objective is to identify key revenue drivers, evaluate product and store performance, and uncover operational inefficiencies affecting profitability and inventory management.
+This project analyzes sales, product performance, store performance, and inventory data for a multi-store toy retailer to identify revenue drivers, profitability gaps, and inventory risks.
 
-The analysis reveals a profitable business with strong seasonal demand patterns, but also highlights inefficiencies in inventory allocation and uneven product contribution to revenue and profit.
+The goal was to determine where management can increase revenue, improve profit margins, optimize inventory allocation, and reduce operational inefficiencies.
 
 ---
 
 ## Business Problem
-Although the business is profitable, several operational challenges exist:
 
-- Uneven profitability across product categories and SKUs  
-- Inventory misalignment leading to stockouts and overstock situations  
-- Revenue concentration in a limited number of products and stores  
-- Seasonal fluctuations impacting demand forecasting and planning  
+Despite strong overall sales, the company lacks visibility into key business questions:
 
-This analysis aims to provide data-driven recommendations to improve profitability and operational efficiency.
+- Which products generate the most revenue and profit?
+- Which products sell well but have poor margins?
+- Which stores perform best in revenue versus efficiency?
+- Is inventory aligned with product demand?
+- Where is capital tied up in slow-moving stock?
 
----
+This project answers the following question:
 
-## Key Business Questions
-- Which products generate the highest revenue and profit?
-- How does profitability vary across product categories?
-- Which stores contribute the most to overall performance?
-- Where do inventory inefficiencies exist?
-- What seasonal patterns exist in sales performance?
+> How is the toy store performing across products, stores, and time — and where can management increase revenue, optimize inventory, and reduce operational risk?
 
 ---
 
-## Data Preparation & Engineering
+## Objectives
 
-The analysis was built on a structured SQL transformation process:
-
-- Removed currency symbols from product pricing fields in the products table  
-- Converted price and cost fields into numeric data types for accurate calculations  
-- Identified duplicate records in sales data using aggregation checks  
-- Handled missing values within calculated fields using COALESCE  
-- Built a centralized analytics table (`master_sales`) to consolidate sales, product, and store data for analysis  
-
-This transformation layer enabled efficient querying and consistent metric calculations.
+- Evaluate overall business performance
+- Identify top and underperforming products
+- Measure store performance
+- Detect inventory risks such as overstock and stockouts
+- Provide actionable recommendations for management
 
 ---
 
-## Analytical Approach
+## Dataset Overview
 
-### 1. Product Performance Analysis
-- Measured total revenue and profit by product  
-- Calculated profit margins across products and categories  
-- Ranked products using window functions  
+The dataset consists of five tables:
 
-**Key Insight:**  
-High revenue products are not always the most profitable, indicating a need to balance volume and margin-driven strategy.
+- `sales` — transaction-level sales records
+- `products` — product details, cost, and price
+- `stores` — store metadata and location
+- `inventory` — stock levels by store and product
+- `calendar` — date dimension for trend analysis
 
----
-
-### 2. Inventory Efficiency Analysis
-- Identified low-stock high-demand products  
-- Measured sell-through rates across SKUs  
-- Compared inventory levels against actual sales demand  
-
-**Key Insight:**  
-Stockouts in high-demand products result in lost revenue opportunities, while some slow-moving products indicate excess inventory holding.
+A centralized **master_sales** table was created to combine all relevant business dimensions and improve analytical efficiency.
 
 ---
 
-### 3. Store Performance Analysis
-- Evaluated revenue contribution by store  
-- Analyzed profit margins across locations  
-- Ranked store performance over time  
+## Data Cleaning & Preparation
 
-**Key Insight:**  
-Large urban stores drive the majority of revenue, while smaller stores often demonstrate higher efficiency in profit margins.
+Data preparation included:
+
+- Removing currency symbols from price and cost columns
+- Converting text-based numeric fields into decimal values
+- Converting date columns into SQL date format
+- Handling missing values using `COALESCE`
+- Checking for nulls, duplicates, and invalid values
+- Creating a unified analytical table for reporting
+
+This reduced repeated joins and improved query performance.
 
 ---
 
-### 4. Time-Series Analysis
-- Monthly revenue trend analysis  
-- Month-over-month growth using LAG window function  
-- Seasonal pattern identification  
+## Key Performance Indicators
 
-**Key Insight:**  
-Sales demonstrate strong seasonality, with peaks in Q4 and declines in January, followed by gradual recovery.
+| KPI | Value |
+|---|---:|
+| Total Revenue | $14.44M |
+| Total Profit | $4.01M |
+| Profit Margin | 27.8% |
+| Records Analyzed | 800K+ |
+
+---
+
+## Analysis
+
+### Executive Performance
+
+The business generated **$14.44M in revenue** and **$4.01M in profit**, resulting in a healthy **27.8% overall profit margin**.
+
+This indicates strong overall profitability, though performance varies significantly across products and stores.
+
+---
+
+### Product Performance
+
+Product analysis revealed major differences between revenue and profitability.
+
+- **Toys** generated the highest overall revenue
+- **Electronics** generated nearly the same total profit as Toys despite less than half the revenue due to significantly higher margins
+- **Colorbuds** was the most profitable product, generating approximately **$835K in profit** with a **53.4% margin**
+- **Lego Bricks** generated the highest revenue but maintained only a **12.5% profit margin**
+
+This shows that high sales volume does not always translate into strong profitability.
+
+---
+
+### Store Performance
+
+Store performance showed both scale-driven and efficiency-driven success.
+
+- **Ciudad de Mexico 2** was the top-performing store in both revenue(555K) and profit($170K).
+- **Revenue appears to be concentrated in a small number of major-city stores, particularly Mexico City, Guadalajara, and Monterrey.
+- **Morelia 1 and Mexicali 1** had the highest profit margins at **33.1%**
+
+---
+
+### Inventory & Risk Analysis
+
+Inventory analysis indicates a systemic overstocking and low inventory turnover issue across most products.
+
+- **Playfoam** had the highest sell-through rate at 21.16%, making it the fastest-moving product, though still below healthy retail benchmarks
+- **Deck of Cards** had a sell-through rate of only 2.20%, highlighting extremely slow inventory movement
+- Most products fall below 10% sell-through, indicating widespread overstocking rather than isolated inefficiencies
+
+This suggests that inventory levels are not aligned with actual demand patterns, resulting in excess stock and low capital efficiency across the product portfolio.
+---
+
+### Sales Trends
+
+Revenue trends show strong seasonality with pronounced Q4 peaks and mid-year declines.
+
+- Revenue peaks in Q4, with December 2022 reaching 877K (+32.65% MoM), the highest month in the dataset
+- This is followed by a sharp post-peak drop in January 2023 (747K, -14.82% MoM)
+- Mid-year periods consistently underperform, with notable declines such as July–August 2022 (-16.00% and -11.98%) and August 2023 (-20.22%), the steepest monthly drop in the dataset
+- Outside of seasonal peaks, monthly revenue typically ranges between ~650K and ~830K, showing volatility rather than steady growth
+- While there are intermittent spikes (e.g., March 2023 at 883K, +22.26% MoM), these are not sustained month-over-month trends
+
+Overall, the business demonstrates strong seasonal demand (especially Q4-driven spikes) combined with high volatility and no consistent linear growth trend.
+
+---
+
+## Key Insights
+
+- Revenue and profitability are not always aligned: for example, Maven Toys Ciudad de Mexico 2 generates the highest revenue (~555K) and profit (~170K), but its margin (~30.6%) is lower than top efficiency stores like Morelia (~33.1%) and Mexicali (~33.1%)
+- High-revenue stores and products can still underperform in margin: several high-volume stores (e.g., Ciudad de Mexico 1 ~434K revenue, ~25.7% margin; Toluca 1 ~411K revenue, ~25.4% margin) earn strong sales but relatively weak profitability efficiency
+- Store performance depends on both scale and efficiency: top performers like CDMX 2 (170K profit, 555K revenue) show scale dominance, while stores like Morelia (~90484 profit on ~273K revenue, ~33.1% margin) demonstrate efficiency advantage
+- Inventory is not fully optimized relative to demand: most products show extremely low sell-through rates, typically 2%–10%, far below healthy retail benchmarks (~60%–80%), indicating systemic overstocking
+- Slow-moving products tie up capital and increase risk: examples include Deck of Cards (2.2% sell-through), PlayDoh Can (3.83%), Rubik’s Cube (4.04%), and Lego Bricks (5.53%), all indicating excessive inventory relative to demand
+
+---
 
 ## Business Recommendations
 
-Based on the analysis findings:
+Based on the analysis, management should consider:
 
-- Improve inventory replenishment for high-demand products to reduce stockouts and prevent lost sales  
-- Reduce excess inventory for consistently low-performing products to improve capital efficiency  
-- Prioritize high-margin product categories to improve overall profitability mix  
-- Optimize stock allocation across stores based on demand and regional performance patterns  
-- Improve forecasting models to better handle seasonal spikes in Q4 and post-holiday slowdowns
+- Optimizing pricing for high-revenue, low-margin stores/products such as CDMX 1 (~25.7% margin) and Toluca 1 (~25.4% margin) to improve profitability efficiency
+- Reallocating inventory toward relatively faster-moving products like Playfoam (21.16%), Jenga (16.09%), and Hot Wheels 5-Pack (14.22%), while reducing excess stock in products below ~5% sell-through
+- Reducing stock exposure in slow-moving SKUs such as Deck of Cards (2.2%) and other <5% sell-through products to free up working capital and reduce holding costs
+- Studying high-margin stores such as Morelia (~33.1% margin) and Mexicali (~33.1% margin) to identify pricing, cost structure, or operational practices that drive efficiency
+- Tracking product and store performance using both revenue and margin metrics, as shown by the contrast between CDMX 2 (scale leader) and high-margin but lower-volume stores (~33% efficiency leaders)
 
-- ****(com back to add specifics)****
+---
+
+## Skills Demonstrated
+
+- SQL Data Cleaning
+- Exploratory Data Analysis
+- Data Modeling
+- KPI Development
+- Window Functions
+- Business Intelligence Reporting
+- Dashboard Design in Power BI
+- Business Storytelling
 
 ---
 
